@@ -46,13 +46,26 @@
 
 
     <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:hint="Enter Username"
+        android:inputType="textEmailAddress"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmailRegister" />
+
+    <EditText
         android:id="@+id/etPasswordRegister"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:hint="Enter Password"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmailRegister"
+        app:layout_constraintTop_toBottomOf="@+id/etUsername"
         android:layout_margin="24dp"
         android:textSize="18sp"/>
 

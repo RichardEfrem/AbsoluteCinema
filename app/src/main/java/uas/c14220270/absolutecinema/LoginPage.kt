@@ -10,11 +10,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginPage : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +29,9 @@ class LoginPage : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        auth = Firebase.auth
+        db = FirebaseFirestore.getInstance()
 
         val _btnBack = findViewById<FloatingActionButton>(R.id.btnBack)
 
@@ -39,13 +46,38 @@ class LoginPage : AppCompatActivity() {
 
         _btnSignIn.setOnClickListener{
             val email = _etEmail.text.toString()
-            val password = _etEmail.text.toString()
+            val password = _etPassword.text.toString()
 
             auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
-                Toast.makeText(this, "Successfully LoggedIn", Toast.LENGTH_SHORT).show()
+                SharedPreferencesManager.init(this)
+                fetchUserData(email)
             }.addOnFailureListener{
                 Toast.makeText(this, "Log In failed ", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun fetchUserData(email: String) {
+        db.collection("users").document(email).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val username = document.getString("username").toString()
+                    val role = document.getString("role").toString()
+
+                    // Save the data for global access
+                    SharedPreferencesManager.saveString("username", username)
+                    SharedPreferencesManager.saveString("role", role)
+
+                    Toast.makeText(this, "Welcome $username", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this@LoginPage, ProfilePage::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+            }
     }
 }
