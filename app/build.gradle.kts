@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "uas.c14220270.absolutecinema"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "uas.c14220270.absolutecinema"
