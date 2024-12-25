@@ -21,6 +21,9 @@
         <activity
             android:name=".LoginPage"
             android:exported="false" />
+      <activity
+            android:name=".ChooseSeatActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
