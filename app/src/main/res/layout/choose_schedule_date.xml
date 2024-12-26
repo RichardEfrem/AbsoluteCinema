@@ -1,17 +1,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="60dp"
+        android:layout_width="65dp"
         android:layout_height="120dp"
         android:layout_gravity="center"
-        app:cardCornerRadius="30dp"
-        app:cardBackgroundColor="#FFFFFF00"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/secondaryButton"
         app:cardElevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +25,7 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/monthTextView"
+                android:id="@+id/tvMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
@@ -35,7 +35,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/dateTextView"
+                android:id="@+id/tvDay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10"

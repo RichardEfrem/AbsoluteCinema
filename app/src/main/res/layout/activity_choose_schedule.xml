@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryBackground"
-    android:translationY="-8dp"
     tools:context=".ChooseScheduleActivity">
 
+    <!-- Scrollable Content -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="56dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <!-- Back Button and Title -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_marginBottom="16dp">
 
                 <ImageButton
                     android:id="@+id/backButton"
@@ -36,24 +36,24 @@
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/arrow_back_30"
+                    android:contentDescription="Back"
                     app:tint="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
                     android:id="@+id/tvChooseSchedulePageTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Select Seat"
-                    android:textAlignment="center"
                     android:textColor="@color/primaryText"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/backButton"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- RecyclerView for Seat Selection -->
@@ -61,168 +61,195 @@
                 android:id="@+id/seatRecView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp" />
+                android:layout_marginBottom="16dp" />
 
             <!-- Seat Legend -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="48dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/ic_seat_available" />
-
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:text="Available"
-                    android:textColor="@color/primaryText"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="16dp">
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/ic_seat_available" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Available"
+                        android:textColor="@color/primaryText"
+                        android:textSize="12sp" />
+                </LinearLayout>
 
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/ic_seat_reserved" />
-
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:text="Reserved"
-                    android:textColor="@color/primaryText"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="16dp">
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/ic_seat_reserved" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Reserved"
+                        android:textColor="@color/primaryText"
+                        android:textSize="12sp" />
+                </LinearLayout>
 
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:background="@drawable/ic_seat_selected" />
-
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:text="Selected"
-                    android:textColor="@color/primaryText"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/ic_seat_selected" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Selected"
+                        android:textColor="@color/primaryText"
+                        android:textSize="12sp" />
+                </LinearLayout>
 
             </LinearLayout>
 
             <!-- Select Date and Time Title -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/dateTimeTitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:text="Select Date &amp; Time"
+                android:textColor="@color/primaryText"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="Select Date &amp; Time"
-                    android:textAlignment="center"
-                    android:textColor="@color/primaryText"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- RecyclerView for Date and Time Selection -->
+            <!-- RecyclerView for Date Selection -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dateRecView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:translationY="8dp" />
+                android:layout_marginBottom="16dp" />
 
+            <!-- RecyclerView for Time Selection -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/timeRecView"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Total and Buy Ticket Section -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="24dp">
 
-                android:paddingBottom="24dp" />
+                <TextView
+                    android:id="@+id/totalLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    android:textColor="@color/primaryText"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Total and Buy Ticket Section -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-    android:layout_marginBottom="72dp">
+                <TextView
+                    android:id="@+id/totalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR 210.000"
+                    android:textColor="@color/primaryText"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/totalLabel" />
 
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/primaryButton"
-            android:paddingHorizontal="48dp"
-            android:paddingVertical="16dp"
-            android:text="Buy Ticket"
-            android:textColor="@color/secondaryButton"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <Button
+                    android:id="@+id/buyTicketButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primaryButton"
+                    android:text="Buy Ticket"
+                    android:textColor="@color/secondaryButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Total"
-        android:textColor="@color/primaryText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="IDR 210.000"
-        android:textColor="@color/primaryText"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </ScrollView>
 
     <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-    android:background="@color/secondaryBackground"
-    app:itemIconTint="@color/primaryText"
-    app:itemTextColor="@color/primaryText"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:menu="@menu/navigation_menu" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/secondaryBackground"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Home Button -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/homeButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_home_24"
+                android:contentDescription="Home" />
+            <TextView
+                android:id="@+id/homeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/primaryText"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Profile Button -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/profileButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_person_24"
+                android:contentDescription="Profile" />
+            <TextView
+                android:id="@+id/profileText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/primaryText"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
