@@ -45,10 +45,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
-    implementation ("com.github.ismaeldivita:chip-navigation-bar:1.3.4")
     }
 

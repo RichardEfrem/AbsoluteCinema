@@ -12,9 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AbsoluteCinema"
         tools:targetApi="31">
+
+        <!-- Make ChooseScheduleActivity the launcher activity -->
         <activity
             android:name=".ChooseScheduleActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Other activities -->
         <activity
             android:name=".RegisterPage"
             android:exported="false" />
@@ -22,17 +31,9 @@
             android:name=".LoginPage"
             android:exported="false" />
         <activity
-            android:name=".ChooseSeatActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
