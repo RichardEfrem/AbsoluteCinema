@@ -12,7 +12,7 @@ class MovieAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<Movie
     class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val movieImage: ImageView = view.findViewById(R.id.movieImage)
         val movieTitle: TextView = view.findViewById(R.id.movieTitle)
-        val movieDescription: TextView = view.findViewById(R.id.movieDescription)
+//        val movieDescription: TextView = view.findViewById(R.id.movieDescription)
         val movieDuration: TextView = view.findViewById(R.id.movieDuration)
     }
 
@@ -25,7 +25,7 @@ class MovieAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<Movie
         val movie = movies[position]
         holder.movieImage.setImageResource(movie.imageResId)
         holder.movieTitle.text = movie.title
-        holder.movieDescription.text = movie.description
+//        holder.movieDescription.text = movie.description
         holder.movieDuration.text = movie.duration
     }
 

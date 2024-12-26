@@ -1,8 +1,11 @@
 package uas.c14220270.absolutecinema
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import uas.c14220270.absolutecinema.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
@@ -54,16 +57,41 @@ class HomeActivity : AppCompatActivity() {
                 "Guardians of the Galaxy",
                 "A band of misfits comes together to save the galaxy from a powerful enemy while discovering the true meaning of family and friendship.",
                 "1h 45m",
-                R.drawable.coming2
+                R.drawable.coming3
             ),
         )
 
         // Playing Now
-        binding.playingNowRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.playingNowRecyclerView.adapter = MovieAdapter(playingNowMovies)
+        val playingNowRecyclerView = findViewById<RecyclerView>(R.id.playingNowRecyclerView)
+        playingNowRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        playingNowRecyclerView.adapter = MovieAdapter(playingNowMovies)
 
-        // Coming Soon
-        binding.comingSoonRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.comingSoonRecyclerView.adapter = MovieAdapter(comingSoonMovies)
+        val comingSoonRecyclerView = findViewById<RecyclerView>(R.id.comingSoonRecyclerView)
+        comingSoonRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        comingSoonRecyclerView.adapter = MovieAdapter(comingSoonMovies)
+
+
+
+
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> {
+                    // Stay on Home
+                    true
+                }
+                R.id.tickets -> {
+                    // Navigate to Tickets Activity
+                    startActivity(Intent(this, TicketsActivity::class.java))
+                    true
+                }
+                R.id.profile -> {
+                    // Navigate to Profile Activity
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }
