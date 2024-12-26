@@ -65,7 +65,7 @@ class RegisterPage : AppCompatActivity() {
                 val userId = authResult.user?.uid
                 val userData = hashMapOf(
                     "email" to email,
-                    "role" to "admin",
+                    "role" to "user",
                     "username" to username
                 )
 

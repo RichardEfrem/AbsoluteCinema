@@ -24,10 +24,13 @@ class MainActivity : AppCompatActivity() {
             handler.postDelayed(this, 3000) // Auto-slide every 3 seconds
         }
     }
+
     private val images = listOf(
         R.drawable.sonic3,
-        R.drawable.moana2,
-        R.drawable.mufasa
+        R.drawable.moana2new,
+        R.drawable.mufasa,
+        R.drawable.venom3,
+        R.drawable.deadpoolwolverine
     )
 
     private lateinit var auth: FirebaseAuth
@@ -37,10 +40,9 @@ class MainActivity : AppCompatActivity() {
 
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            // User is logged in, redirect to the ProfilePage
             val intent = Intent(this, ProfilePage::class.java)
             startActivity(intent)
-            finish() // Close MainActivity to prevent going back to it
+            finish()
             return
         }
 
@@ -77,7 +79,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Stop the auto-slide when the activity is destroyed to prevent memory leaks
         handler.removeCallbacks(slideRunnable)
     }
 }
