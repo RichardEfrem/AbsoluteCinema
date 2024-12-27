@@ -39,7 +39,7 @@ class TicketPage : AppCompatActivity() {
         val _tvLocation = findViewById<TextView>(R.id.tvLocation)
         val _ivMovie = findViewById<ImageView>(R.id.ivMovie)
 
-        loadData(ticketId, _tvTitle, _tvDuration, _tvGenre, _tvTime, _tvDate, _tvSeat, _tvPrice, _tvLocation, _ivMovie)
+        fetchTicketData(ticketId, _tvTitle, _tvDuration, _tvGenre, _tvTime, _tvDate, _tvSeat, _tvPrice, _tvLocation, _ivMovie)
 
         val _btnBack = findViewById<FloatingActionButton>(R.id.btnBack)
         _btnBack.setOnClickListener {
@@ -47,7 +47,7 @@ class TicketPage : AppCompatActivity() {
         }
     }
 
-    private fun loadData(
+    private fun fetchTicketData(
         ticketId: String,
         tvTitle: TextView,
         tvDuration: TextView,
