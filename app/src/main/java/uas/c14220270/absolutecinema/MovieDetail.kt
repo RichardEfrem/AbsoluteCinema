@@ -1,5 +1,6 @@
 package uas.c14220270.absolutecinema
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
@@ -34,6 +35,11 @@ class MovieDetail : AppCompatActivity() {
         val _chooseSeatsBtn = findViewById<Button>(R.id.bottom_button)
         val _btnBack = findViewById<FloatingActionButton>(R.id.btnBack)
 
+        _btnBack.setOnClickListener{
+            val intent = Intent(this@MovieDetail, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
         // Retrieve data from Intent
         val title = intent.getStringExtra("MOVIE_TITLE") ?: "Unknown Title"
         val duration = intent.getStringExtra("MOVIE_DURATION") ?: "Unknown Duration"
@@ -61,5 +67,7 @@ class MovieDetail : AppCompatActivity() {
         _tvDirector.setText(director)
         _tvProducer.setText(producer)
         _tvActor.setText(actor)
+
+
     }
 }

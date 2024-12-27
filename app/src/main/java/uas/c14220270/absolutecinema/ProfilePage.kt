@@ -3,6 +3,7 @@ package uas.c14220270.absolutecinema
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -55,6 +56,19 @@ class ProfilePage : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
+        val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
+
+        _homeBtn.setOnClickListener{
+            val intent = Intent(this@ProfilePage, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
+        _profileBtn.setOnClickListener{
+            val intent = Intent(this@ProfilePage, ProfilePage::class.java)
+            startActivity(intent)
         }
     }
 }

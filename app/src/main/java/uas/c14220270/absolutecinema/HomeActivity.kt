@@ -1,8 +1,10 @@
 package uas.c14220270.absolutecinema
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -41,6 +43,19 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnMovieClickListener {
         recyclerView.adapter = homeAdapter
 
         fetchAllMovies()
+
+        val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
+        val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
+
+        _homeBtn.setOnClickListener{
+            val intent = Intent(this@HomeActivity, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
+        _profileBtn.setOnClickListener{
+            val intent = Intent(this@HomeActivity, ProfilePage::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun fetchAllMovies(){
