@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import uas.c14220270.absolutecinema.databinding.ActivityHomeBinding
@@ -70,7 +71,11 @@ class HomeActivity : AppCompatActivity() {
         comingSoonRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         comingSoonRecyclerView.adapter = MovieAdapter(comingSoonMovies)
 
+        val snapHelperPlayingNow = PagerSnapHelper()
+        snapHelperPlayingNow.attachToRecyclerView(playingNowRecyclerView)
 
+        val snapHelperComingSoon = PagerSnapHelper()
+        snapHelperComingSoon.attachToRecyclerView(comingSoonRecyclerView)
 
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
