@@ -1,6 +1,5 @@
 package uas.c14220270.absolutecinema
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +22,17 @@ class MovieAdapter(private val movieList: List<Movie>) : RecyclerView.Adapter<Mo
 
     override fun onBindViewHolder(holder: MovieAdapter.MovieViewHolder, position: Int) {
         val movie = movieList[position]
-        val uri = Uri.parse(movie.image)
-        holder._ivMovie.setImageURI(uri)
+        val resourceId = holder.itemView.context.resources.getIdentifier(
+            movie.imageUrl.replace("@drawable/", ""),
+            "drawable",
+            holder.itemView.context.packageName
+        )
+
+        if (resourceId != 0) {
+            holder._ivMovie.setImageResource(resourceId)
+        } else {
+            holder._ivMovie.setImageResource(R.drawable.sonic3)
+        }
         holder._tvTitle.text = movie.title
         holder._tvDuration.text = movie.duration
         holder._tvGenre.text = movie.genre

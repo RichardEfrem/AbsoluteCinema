@@ -22,7 +22,9 @@
         <!-- Other activities -->
         <activity
             android:name=".MoviePage"
-            android:exported="false" />
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".TicketPage"
             android:exported="false" >

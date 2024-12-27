@@ -46,7 +46,12 @@ class MoviePage : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 movieList.clear()
                 for (document in result) {
-                    val movie = document.toObject(Movie::class.java)
+                    val title = document.getString("title") ?: ""
+                    val duration = document.getString("duration") ?: ""
+                    val genre = document.getString("genre") ?: ""
+                    val imageUrl = document.getString("imageUrl") ?: ""
+
+                    val movie = Movie(title, duration, genre, imageUrl)
                     movieList.add(movie)
                 }
                 movieAdapter.notifyDataSetChanged()
