@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A111F"
+    tools:context=".MovieDetail">
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/venom3theme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Scrollable Content -->
+    <ScrollView
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_button"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage"
+        tools:layout_editor_absoluteX="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Movie Title -->
+            <TextView
+                android:id="@+id/tvMovieTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Avengers: Infinity War"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+            <!-- Movie Duration -->
+            <TextView
+                android:id="@+id/tvMovieDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="2h 29m"
+                android:textColor="#B3B3B3"
+                android:textSize="14sp" />
+
+            <!-- Movie Genre -->
+            <TextView
+                android:id="@+id/tvMovieGenre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Action, Adventure, Sci-Fi"
+                android:textColor="#B3B3B3"
+                android:textSize="14sp" />
+
+            <!-- Storyline Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Storyline"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <!-- Storyline Content -->
+            <TextView
+                android:id="@+id/tvStoryline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos..."
+                android:textColor="#B3B3B3"
+                android:textSize="14sp" />
+
+            <!-- Director Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Director"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <!-- Director Names -->
+            <TextView
+                android:id="@+id/tvDirector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Anthony Russo, Joe Russo"
+                android:textColor="#B3B3B3"
+                android:textSize="14sp" />
+
+            <!-- Director Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Producer"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <!-- Director Names -->
+            <TextView
+                android:id="@+id/tvProducer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Kevin Feige"
+                android:textColor="#B3B3B3"
+                android:textSize="14sp" />
+
+            <!-- Actor Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Actor"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <!-- Actor Names -->
+            <TextView
+                android:id="@+id/tvActor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Robert Downey Jr., Chris Hemsworth, Chris Evans"
+                android:textColor="#B3B3B3"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Button always at the bottom -->
+    <Button
+        android:id="@+id/bottom_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose Seats"
+        android:backgroundTint="#FFBF00"
+        android:layout_margin="16dp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+        android:layout_margin="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/arrow_back_30"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

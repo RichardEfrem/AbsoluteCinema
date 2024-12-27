@@ -70,7 +70,7 @@ class LoginPage : AppCompatActivity() {
 
                     Toast.makeText(this, "Welcome $username", Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this@LoginPage, ProfilePage::class.java)
+                    val intent = Intent(this@LoginPage, HomeActivity::class.java)
                     startActivity(intent)
                 } else {
                     Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()
