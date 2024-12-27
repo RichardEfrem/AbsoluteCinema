@@ -1,9 +1,8 @@
 package uas.c14220270.absolutecinema
 
-import android.graphics.Rect
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,28 +11,23 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-import uas.c14220270.absolutecinema.Adapters.ChooseScheduleDateAdapter
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleSeatAdapter
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleTimeAdapter
 import uas.c14220270.absolutecinema.Models.ChooseScheduleSeatModel
 import java.text.DecimalFormat
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 class ChooseScheduleActivity : AppCompatActivity() {
     private lateinit var _seatRecView: RecyclerView
-    private lateinit var _dateRecView: RecyclerView
     private lateinit var _timeRecView: RecyclerView
     private lateinit var _tvTotalPrice: TextView
     private var price: Double = 0.0
     private var number: Int = 0
-    private lateinit var filmName : String
+    private lateinit var filmName: String
+    private lateinit var _buyTicketButton: TextView
 
     private var selectedSeat: List<ChooseScheduleSeatModel> = emptyList()
-    private var selectedDate: String? = null
     private var selectedTime: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,91 +41,166 @@ class ChooseScheduleActivity : AppCompatActivity() {
         }
 
         _seatRecView = findViewById(R.id.seatRecView)
-        _dateRecView = findViewById(R.id.dateRecView)
         _timeRecView = findViewById(R.id.timeRecView)
         _tvTotalPrice = findViewById(R.id.tvTotalPrice)
+        _buyTicketButton = findViewById(R.id.buyTicketButton)
 
         filmName = intent.getStringExtra("MOVIE_TITLE") ?: "Default Movie Title"
 
-        initSeatList()
+        selectedTime = intent.getStringExtra("SELECTED_TIME")
+        Log.d("SELECTED TIME", selectedTime.toString())
+
+        initTimeList()
+
+        _buyTicketButton.setOnClickListener {
+            buyTicket()
+        }
     }
 
-    private fun initSeatList() {
+    private fun buyTicket() {
+        val userId = "user123" // TODO : DAPATKAN USER ID YANG RIL
+        val seatsSelected = selectedSeat.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
+        val seatNumbers = seatsSelected.joinToString(",") { it.seatNumber.toString() }
+
+        val ticketData = hashMapOf(
+            "movie_title" to filmName,
+            "price" to price,
+            "seats" to seatNumbers,
+            "time" to selectedTime,
+            "user_id" to userId
+        )
+
         val db = Firebase.firestore
-        val gridLayoutManager = GridLayoutManager(this, 5)
-        _seatRecView.layoutManager = gridLayoutManager
+        db.collection("tickets")
+            .add(ticketData)
+            .addOnSuccessListener { documentReference ->
+                Log.d("Firestore", "Ticket added with ID: ${documentReference.id}")
 
-        val movieId = "1"
-        val seatList = mutableListOf<ChooseScheduleSeatModel>()
+                updateSeatsToBooked(seatsSelected)
 
-        db.collection("movies").document(movieId).collection("seats")
+                val intent = Intent(this, ChooseScheduleActivity::class.java)
+                intent.putExtra("MOVIE_TITLE", filmName)
+                intent.putExtra("SELECTED_TIME", selectedTime)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error adding ticket: ", e)
+            }
+    }
+
+    private fun updateSeatsToBooked(seatsSelected: List<ChooseScheduleSeatModel>) {
+        val db = Firebase.firestore
+        val formattedTime = selectedTime?.replace(".", "") ?: ""
+        val showId = "${filmName.replace(" ", "")}@$formattedTime"
+
+        db.collection("shows").document(showId)
             .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val seatNumber = document.id.toInt()
-                    val status = document.getString("status") ?: "available"
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val seats = document.get("seats") as? Map<String, String> ?: emptyMap()
 
-                    val seatStatus = when (status) {
-                        "available" -> ChooseScheduleSeatModel.SeatStatus.AVAILABLE
-                        "booked" -> ChooseScheduleSeatModel.SeatStatus.BOOKED
-                        else -> ChooseScheduleSeatModel.SeatStatus.AVAILABLE
+                    val updatedSeats = seats.toMutableMap()
+                    seatsSelected.forEach { seat ->
+                        updatedSeats[seat.seatNumber.toString()] = "Booked"
                     }
 
-                    seatList.add(ChooseScheduleSeatModel(seatStatus, seatNumber))
+                    db.collection("shows").document(showId)
+                        .update("seats", updatedSeats)
+                        .addOnSuccessListener {
+                            Log.d("Firestore", "Seats updated to BOOKED")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Firestore", "Error updating seats: ", e)
+                        }
+                } else {
+                    Log.w("Firestore", "No such show found!")
                 }
-
-                _seatRecView.adapter = ChooseScheduleSeatAdapter(seatList, this, object : ChooseScheduleSeatAdapter.SelectedSeat {
-                    override fun Return(selectedName: String, num: Int) {
-                        val df = DecimalFormat("#,###")
-                        val formattedPrice = df.format(num * 50000)
-                        price = (num * 50000).toDouble()
-
-                        number = num
-
-                        selectedSeat = seatList.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
-                        Log.d("SelectedSeats", selectedSeat.toString())
-
-                        _tvTotalPrice.text = "IDR $formattedPrice"
-                    }
-                })
             }
             .addOnFailureListener { exception ->
                 Log.e("Firestore", "Error fetching seats: ", exception)
             }
+    }
 
+
+    private fun initTimeList() {
+        val db = Firebase.firestore
         _timeRecView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        _timeRecView.adapter = ChooseScheduleTimeAdapter(generateTimeSlots()) { selectedTimeSlot ->
-            selectedTime = selectedTimeSlot
-            Log.d("SelectedTime", "Selected Time: $selectedTime")
-        }
 
-        _dateRecView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        _dateRecView.adapter = ChooseScheduleDateAdapter(generateDates()) { selectedDateSlot ->
-            selectedDate = selectedDateSlot
-            Log.d("SelectedDate", "Selected Date: $selectedDate")
-        }
+        db.collection("shows")
+            .whereEqualTo("movieTitle", filmName)
+            .get()
+            .addOnSuccessListener { documents ->
+                val timeSlots = documents.mapNotNull { doc ->
+                    doc.getString("time")
+                }
+
+                if (selectedTime == null && timeSlots.isNotEmpty()) {
+                    selectedTime = timeSlots.first()
+                    Log.d("DEFAULT TIME", "Using first time slot: $selectedTime")
+                }
+
+                _timeRecView.adapter = ChooseScheduleTimeAdapter(timeSlots) { selectedTimeSlot ->
+                    val intent = Intent(this, ChooseScheduleActivity::class.java)
+                    intent.putExtra("MOVIE_TITLE", filmName)
+                    intent.putExtra("SELECTED_TIME", selectedTimeSlot)
+                    startActivity(intent)
+                }
+
+                selectedTime?.let {
+                    fetchSeatsForShow(it)
+                    Log.d("ENTER FETCH SEATS", "Fetching seats for $it")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error fetching time slots: ", exception)
+            }
     }
 
+    private fun fetchSeatsForShow(time: String) {
+        val db = Firebase.firestore
+        val formattedTime = time.replace(".", "")
+        val showId = "${filmName.replace(" ", "")}@$formattedTime"
+        val seatList = mutableListOf<ChooseScheduleSeatModel>()
+        Log.d("SHOW ID", showId)
 
+        db.collection("shows").document(showId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val seats = document.get("seats") as? Map<String, String> ?: emptyMap()
 
-    private fun generateTimeSlots(): List<String> {
-        val timeSlots = mutableListOf<String>()
-        val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-        for (i in 8..22 step 2) {
-            val time = LocalTime.of(i, 0).format(formatter)
-            timeSlots.add(time)
-        }
-        return timeSlots
-    }
+                    if (seats.isEmpty()) {
+                        Log.w("Firestore", "No seats found for this show")
+                    } else {
+                        for ((seatNumber, status) in seats) {
+                            val seatStatus = when (status) {
+                                "Available" -> ChooseScheduleSeatModel.SeatStatus.AVAILABLE
+                                "Booked" -> ChooseScheduleSeatModel.SeatStatus.BOOKED
+                                else -> ChooseScheduleSeatModel.SeatStatus.AVAILABLE
+                            }
+                            seatList.add(ChooseScheduleSeatModel(seatStatus, seatNumber.toInt()))
+                        }
+                        Log.d("SEAT LIST LOG", seatList.toString())
 
-    private fun generateDates(): List<String> {
-        val dates = mutableListOf<String>()
-        val today = LocalDate.now()
-        val formatter = DateTimeFormatter.ofPattern("EEE/dd/MMM")
-        for (i in 0..6) {
-            dates.add(today.plusDays(i.toLong()).format(formatter))
-        }
-        return dates
+                        _seatRecView.layoutManager = GridLayoutManager(this, 5)
+                        _seatRecView.adapter = ChooseScheduleSeatAdapter(seatList, this, object : ChooseScheduleSeatAdapter.SelectedSeat {
+                            override fun Return(selectedName: String, num: Int) {
+                                val df = DecimalFormat("#,###")
+                                price = num * 50000.0
+                                _tvTotalPrice.text = "IDR ${df.format(price)}"
+                                number = num
+                                selectedSeat = seatList.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
+                            }
+                        })
+                    }
+                } else {
+                    Log.w("Firestore", "No such show found!")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error fetching seats: ", exception)
+            }
     }
 }
 
