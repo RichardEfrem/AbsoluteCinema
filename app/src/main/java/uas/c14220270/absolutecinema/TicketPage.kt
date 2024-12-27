@@ -32,14 +32,13 @@ class TicketPage : AppCompatActivity() {
         val _tvTitle = findViewById<TextView>(R.id.tvTitle)
         val _tvDuration = findViewById<TextView>(R.id.tvDuration)
         val _tvGenre = findViewById<TextView>(R.id.tvGenre)
-        val _tvTime = findViewById<TextView>(R.id.tvTime)
-        val _tvDate = findViewById<TextView>(R.id.tvDate)
+        val _tvDateTime = findViewById<TextView>(R.id.tvDateTime)
         val _tvSeat = findViewById<TextView>(R.id.tvSeat)
         val _tvPrice = findViewById<TextView>(R.id.tvPrice)
         val _tvLocation = findViewById<TextView>(R.id.tvLocation)
         val _ivMovie = findViewById<ImageView>(R.id.ivMovie)
 
-        fetchTicketData(ticketId, _tvTitle, _tvDuration, _tvGenre, _tvTime, _tvDate, _tvSeat, _tvPrice, _tvLocation, _ivMovie)
+        fetchTicketData(ticketId, _tvTitle, _tvDuration, _tvGenre, _tvDateTime, _tvSeat, _tvPrice, _tvLocation, _ivMovie)
 
         val _btnBack = findViewById<FloatingActionButton>(R.id.btnBack)
         _btnBack.setOnClickListener {
@@ -52,8 +51,7 @@ class TicketPage : AppCompatActivity() {
         tvTitle: TextView,
         tvDuration: TextView,
         tvGenre: TextView,
-        tvTime: TextView,
-        tvDate: TextView,
+        tvDateTime: TextView,
         tvSeat: TextView,
         tvPrice: TextView,
         tvLocation: TextView,
@@ -66,8 +64,7 @@ class TicketPage : AppCompatActivity() {
                     tvTitle.text = document.getString("title")
                     tvDuration.text = document.getString("duration")
                     tvGenre.text = document.getString("genre")
-                    tvTime.text = document.getString("time")
-                    tvDate.text = document.getString("date")
+                    tvDateTime.text = document.getString("datetime")
                     tvSeat.text = document.getString("seat")
                     tvPrice.text = document.getString("price")
                     tvLocation.text = document.getString("location")

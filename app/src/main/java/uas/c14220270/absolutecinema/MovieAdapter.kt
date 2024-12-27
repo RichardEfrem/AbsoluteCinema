@@ -12,7 +12,6 @@ class MovieAdapter(private val movieList: List<Movie>) : RecyclerView.Adapter<Mo
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val _ivMovie = itemView.findViewById<ImageView>(R.id.ivMovie)
         val _tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
-        val _tvRate = itemView.findViewById<TextView>(R.id.tvRate)
         val _tvDuration = itemView.findViewById<TextView>(R.id.tvDuration)
         val _tvGenre = itemView.findViewById<TextView>(R.id.tvGenre)
     }
@@ -27,7 +26,6 @@ class MovieAdapter(private val movieList: List<Movie>) : RecyclerView.Adapter<Mo
         val uri = Uri.parse(movie.image)
         holder._ivMovie.setImageURI(uri)
         holder._tvTitle.text = movie.title
-        holder._tvRate.text = movie.rate
         holder._tvDuration.text = movie.duration
         holder._tvGenre.text = movie.genre
     }

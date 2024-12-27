@@ -125,7 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:src="@drawable/baseline_access_time_24"
+            android:src="@drawable/video_16_black"
             app:layout_constraintStart_toStartOf="@+id/ivDuration"
             app:layout_constraintTop_toBottomOf="@+id/ivDuration" />
 
@@ -150,30 +150,21 @@
             app:layout_constraintTop_toBottomOf="@+id/ivMovie" />
 
         <TextView
-            android:id="@+id/tvTime"
+            android:id="@+id/tvDateTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="13:45"
-            android:textSize="14sp"
             android:layout_marginLeft="8dp"
+            android:text="01-01-2020, 13:45"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivTime"
             app:layout_constraintStart_toEndOf="@+id/ivTime"
             app:layout_constraintTop_toTopOf="@+id/ivTime" />
-
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="28-12-2024"
-            android:textSize="14sp"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ivTime"
-            app:layout_constraintStart_toEndOf="@id/ivTime"/>
 
         <ImageView
             android:id="@+id/ivSeat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/outline_calendar_month_24"
+            android:src="@drawable/seat_24_black"
             app:layout_constraintBottom_toBottomOf="@+id/ivTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivMovie"
@@ -225,7 +216,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:src="@drawable/baseline_currency_exchange_24"
+            android:src="@drawable/location_24_black"
             app:layout_constraintStart_toStartOf="@id/ivPrice"
             app:layout_constraintTop_toBottomOf="@+id/ivPrice" />
 
@@ -233,7 +224,7 @@
             android:id="@+id/tvLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Tunjungan Plaza 1, Surabaya"
+            android:text="Absolute Cinema, Surabaya, Indonesia"
             android:textSize="14sp"
             android:layout_marginLeft="8dp"
             app:layout_constraintStart_toEndOf="@+id/ivLocation"
