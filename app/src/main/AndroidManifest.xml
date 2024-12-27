@@ -16,11 +16,7 @@
         <!-- Make ChooseScheduleActivity the launcher activity -->
         <activity
             android:name=".ChooseScheduleActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
 
         <!-- Other activities -->
@@ -29,16 +25,17 @@
             android:exported="false" />
         <activity
             android:name=".TicketPage"
-            android:exported="false" />
+            android:exported="false" >
+        </activity>
         <activity
             android:name=".MovieDetail"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
-        <activity
-            android:name=".AdminOption"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".AdminOption"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".ProfilePage"
             android:exported="false" />
@@ -48,10 +45,18 @@
         <activity
             android:name=".LoginPage"
             android:exported="false" />
-
         <activity
-            android:name=".ChooseSeatActivity"
-            android:exported="false" />
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+<!--        <activity-->
+<!--            android:name=".ChooseSeatActivity"-->
+<!--            android:exported="false" />-->
 
     </application>
 

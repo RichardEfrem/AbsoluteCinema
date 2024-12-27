@@ -46,8 +46,8 @@ class HomeAdapter(
         holder.movieDuration.text = movie.duration
         holder.movieGenre.text = movie.genre
 
-        // Set onClickListener
-        holder.itemView.setOnClickListener {
+        // Set OnClickListener on movieImage only
+        holder.movieImage.setOnClickListener {
             listener.onMovieClick(movie)
         }
     }

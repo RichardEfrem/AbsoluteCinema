@@ -22,7 +22,7 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="16dp"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_button"
         app:layout_constraintTop_toBottomOf="@+id/ivImage"
         tools:layout_editor_absoluteX="16dp">
@@ -159,10 +159,12 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#FFFFFF"
         android:layout_margin="8dp"
+        android:contentDescription="back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/arrow_back_30"/>

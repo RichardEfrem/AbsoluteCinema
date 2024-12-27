@@ -37,7 +37,7 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnMovieClickListener {
         // Set up RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.playingNowRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        homeAdapter = HomeAdapter(movieList)
+        homeAdapter = HomeAdapter(movieList, this)
         recyclerView.adapter = homeAdapter
 
         fetchAllMovies()

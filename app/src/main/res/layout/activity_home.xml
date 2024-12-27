@@ -91,7 +91,7 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/movieButton"
+                android:id="@+id/homeButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -117,18 +117,17 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/movieButton"
+                android:id="@+id/ticketButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Home"
-                android:src="@drawable/ticket_24"
-                app:tint="@color/white"
-                tools:src="@drawable/ticket_24" />
+                android:src="@drawable/baseline_home_24"
+                app:tint="@color/white" />
 
 
             <TextView
-                android:id="@+id/homeText"
+                android:id="@+id/ticketText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ticket"
@@ -150,12 +149,11 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Home"
                 android:src="@drawable/baseline_home_24"
-                app:tint="@color/white"
-                tools:src="@drawable/video_24" />
+                app:tint="@color/white" />
 
 
             <TextView
-                android:id="@+id/homeText"
+                android:id="@+id/movieText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Movie"
