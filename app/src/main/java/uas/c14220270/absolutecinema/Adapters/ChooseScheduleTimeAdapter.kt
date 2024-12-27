@@ -8,28 +8,25 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import uas.c14220270.absolutecinema.R
 
-class ChooseScheduleTimeAdapter(private val timeSlots: List<String>) : RecyclerView.Adapter<ChooseScheduleTimeAdapter.ChooseScheduleTimeViewHolder>() {
+class ChooseScheduleTimeAdapter(
+    private val timeSlots: List<String>,
+    private val onTimeSelected: (String) -> Unit
+) : RecyclerView.Adapter<ChooseScheduleTimeAdapter.ChooseScheduleTimeViewHolder>() {
 
     private var selectedPosition = -1
-    private var lastSelectedPosition = -1
 
     class ChooseScheduleTimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         private val _tvTime = itemView.findViewById<TextView>(R.id.tvTime)
         private val _cardView = itemView.findViewById<CardView>(R.id.cardView)
 
         fun bind(time: String, selectedPosition: Int, position: Int, onClick: (Int) -> Unit) {
             _tvTime.text = time
+            _cardView.setCardBackgroundColor(
+                if (selectedPosition == position) itemView.context.getColor(R.color.primaryButton)
+                else itemView.context.getColor(R.color.secondaryButton)
+            )
 
-            if (selectedPosition == position) {
-                _cardView.setCardBackgroundColor(itemView.context.getColor(R.color.primaryButton))
-            } else {
-                _cardView.setCardBackgroundColor(itemView.context.getColor(R.color.secondaryButton))
-            }
-
-            itemView.setOnClickListener {
-                onClick(position)
-            }
+            itemView.setOnClickListener { onClick(position) }
         }
     }
 
@@ -38,21 +35,16 @@ class ChooseScheduleTimeAdapter(private val timeSlots: List<String>) : RecyclerV
         return ChooseScheduleTimeViewHolder(itemView)
     }
 
-    override fun getItemCount(): Int {
-        return timeSlots.size
-    }
+    override fun getItemCount() = timeSlots.size
 
     override fun onBindViewHolder(holder: ChooseScheduleTimeViewHolder, position: Int) {
-        val time = timeSlots[position]
-
-        holder.bind(time, selectedPosition, position) { selectedPos ->
+        holder.bind(timeSlots[position], selectedPosition, position) { selectedPos ->
             if (selectedPosition != selectedPos) {
-                lastSelectedPosition = selectedPosition
                 selectedPosition = selectedPos
-
-                notifyItemChanged(lastSelectedPosition)
-                notifyItemChanged(selectedPosition)
+                notifyDataSetChanged()
+                onTimeSelected(timeSlots[selectedPosition])
             }
         }
     }
 }
+
