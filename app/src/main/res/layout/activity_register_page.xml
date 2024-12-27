@@ -6,32 +6,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterPage"
-    android:background="@drawable/gradient_background">
+    android:background="#0A111F">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="BackButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="28dp"
-        android:layout_marginStart="32dp"
         android:backgroundTint="@color/white"
-        android:src="@drawable/arrow_back_30"/>
+        android:contentDescription="BackButton"
+        android:src="@drawable/arrow_back_30"
+        android:layout_margin="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
         android:text="Sign Up"
-        android:textColor="@color/black"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnBack" />
 
     <EditText
         android:id="@+id/etEmailRegister"
@@ -40,6 +39,9 @@
         android:hint="Enter Email"
         android:inputType="textEmailAddress"
         android:textSize="18sp"
+        android:textColorHint="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         android:layout_margin="24dp" />
@@ -53,6 +55,9 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:hint="Enter Username"
+        android:textColorHint="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="@color/white"
         android:inputType="textEmailAddress"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +69,9 @@
         android:layout_height="48dp"
         android:hint="Enter Password"
         android:inputType="textPassword"
+        android:textColorHint="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etUsername"
         android:layout_margin="24dp"
@@ -77,6 +85,9 @@
         android:hint="Enter Password Confirmation"
         android:inputType="textPassword"
         android:textSize="18sp"
+        android:textColorHint="#FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPasswordRegister" />
 
@@ -87,8 +98,9 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="30dp"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="#FFBF00"
         android:text="Sign Up"
+        android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPasswordRegisterConfirmation" />
