@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +30,20 @@ class MainActivity : AppCompatActivity() {
         R.drawable.mufasa
     )
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        auth = FirebaseAuth.getInstance()
+
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // User is logged in, redirect to the ProfilePage
+            val intent = Intent(this, ProfilePage::class.java)
+            startActivity(intent)
+            finish() // Close MainActivity to prevent going back to it
+            return
+        }
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TicketPage"
+    android:background="@color/primaryBackground"
+    android:padding="16dp">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/secondaryButton"
+        android:src="@drawable/arrow_back_30"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvMyTicket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Ticket"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryText"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clTicket"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/curve"
+        android:backgroundTint="@color/secondaryBackground"
+        app:layout_constraintVertical_bias="0.5"
+        android:elevation="4dp"
+        android:padding="24dp"
+        app:layout_constraintTop_toBottomOf="@id/tvMyTicket"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/ivQr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/qr"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvInstruction"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Show This QR code To The Ticket Counter"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivQr" />
+
+        <View
+            android:id="@+id/vDivider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/black"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvInstruction" />
+
+        <ImageView
+            android:id="@+id/ivMovie"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/sonic3"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="@+id/vDivider"
+            app:layout_constraintTop_toBottomOf="@id/vDivider" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Sonic 3"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toEndOf="@+id/ivMovie"
+            app:layout_constraintTop_toTopOf="@id/ivMovie" />
+
+        <ImageView
+            android:id="@+id/ivDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/baseline_access_time_24"
+            app:layout_constraintStart_toStartOf="@+id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <TextView
+            android:id="@+id/tvDuration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="2 hours 29 minutes"
+            android:textSize="12sp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivDuration"
+            app:layout_constraintStart_toEndOf="@+id/ivDuration"
+            app:layout_constraintTop_toTopOf="@+id/ivDuration" />
+
+        <ImageView
+            android:id="@+id/ivGenre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/video_16_black"
+            app:layout_constraintStart_toStartOf="@+id/ivDuration"
+            app:layout_constraintTop_toBottomOf="@+id/ivDuration" />
+
+        <TextView
+            android:id="@+id/tvGenre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Action, Adventure"
+            android:textSize="12sp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivGenre"
+            app:layout_constraintStart_toEndOf="@+id/ivGenre"
+            app:layout_constraintTop_toTopOf="@+id/ivGenre" />
+
+        <ImageView
+            android:id="@+id/ivTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/outline_calendar_month_24"
+            app:layout_constraintStart_toStartOf="@+id/ivMovie"
+            app:layout_constraintTop_toBottomOf="@+id/ivMovie" />
+
+        <TextView
+            android:id="@+id/tvDateTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="01-01-2020, 13:45"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivTime"
+            app:layout_constraintStart_toEndOf="@+id/ivTime"
+            app:layout_constraintTop_toTopOf="@+id/ivTime" />
+
+        <ImageView
+            android:id="@+id/ivSeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/seat_24_black"
+            app:layout_constraintBottom_toBottomOf="@+id/ivTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivMovie"
+            app:layout_constraintTop_toTopOf="@+id/ivTime" />
+
+        <TextView
+            android:id="@+id/tvSeat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Seat C7"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintStart_toEndOf="@+id/ivSeat"
+            app:layout_constraintTop_toTopOf="@+id/ivSeat"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSeat" />
+
+        <View
+            android:id="@+id/vDivider1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/black"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivTime" />
+
+        <ImageView
+            android:id="@+id/ivPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/baseline_currency_exchange_24"
+            app:layout_constraintStart_toStartOf="@+id/vDivider1"
+            app:layout_constraintTop_toBottomOf="@+id/vDivider1" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Rp. 50.000"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintStart_toEndOf="@+id/ivPrice"
+            app:layout_constraintTop_toTopOf="@+id/ivPrice"
+            app:layout_constraintBottom_toBottomOf="@+id/ivPrice" />
+
+        <ImageView
+            android:id="@+id/ivLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/location_24_black"
+            app:layout_constraintStart_toStartOf="@id/ivPrice"
+            app:layout_constraintTop_toBottomOf="@+id/ivPrice" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Absolute Cinema, Surabaya, Indonesia"
+            android:textSize="14sp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintStart_toEndOf="@+id/ivLocation"
+            app:layout_constraintTop_toTopOf="@+id/ivLocation"
+            app:layout_constraintBottom_toBottomOf="@+id/ivLocation" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

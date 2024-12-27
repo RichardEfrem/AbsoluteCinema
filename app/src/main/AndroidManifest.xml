@@ -25,6 +25,15 @@
 
         <!-- Other activities -->
         <activity
+            android:name=".MoviePage"
+            android:exported="false" />
+        <activity
+            android:name=".TicketPage"
+            android:exported="false" />
+        <activity
+            android:name=".ProfilePage"
+            android:exported="false" />
+        <activity
             android:name=".RegisterPage"
             android:exported="false" />
         <activity

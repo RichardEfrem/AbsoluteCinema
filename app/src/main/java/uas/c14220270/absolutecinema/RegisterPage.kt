@@ -13,10 +13,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterPage : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,32 +38,51 @@ class RegisterPage : AppCompatActivity() {
         }
 
         val _etEmailRegister = findViewById<EditText>(R.id.etEmailRegister)
+        val _etUsername = findViewById<EditText>(R.id.etUsername)
         val _etPasswordRegister = findViewById<EditText>(R.id.etPasswordRegister)
         val _etPasswordRegisterConfirmation = findViewById<EditText>(R.id.etPasswordRegisterConfirmation)
         val _btnSignUp = findViewById<Button>(R.id.btnSignUp)
 
         auth = Firebase.auth
+        db = FirebaseFirestore.getInstance()
 
         _btnSignUp.setOnClickListener{
             val email = _etEmailRegister.text.toString()
             val password = _etPasswordRegister.text.toString()
             val passwordConfirmation = _etPasswordRegisterConfirmation.text.toString()
+            val username = _etUsername.text.toString()
 
-            if (email.isBlank() || password.isBlank() || passwordConfirmation.isBlank()) {
-                Toast.makeText(this, "Email and Password can't be blank", Toast.LENGTH_SHORT).show()
+            if (email.isBlank() || password.isBlank() || passwordConfirmation.isBlank() || username.isBlank()) {
+                Toast.makeText(this, "Email / Password / Username can't be blank", Toast.LENGTH_SHORT).show()
             }
 
             if (password != passwordConfirmation) {
-                Toast.makeText(this, "Password and Confirm Password do not match", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Password and Password Confirmation do not match", Toast.LENGTH_SHORT)
                     .show()
             }
 
-            auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
-                Toast.makeText(this, "Successfully Signed Up, Login With Your Created Account", Toast.LENGTH_LONG).show()
-                intent = Intent(this@RegisterPage, LoginPage::class.java)
-                startActivity(intent)
-            }.addOnFailureListener{
-                Toast.makeText(this, "Sign Up Failed", Toast.LENGTH_SHORT).show()
+            auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener { authResult ->
+                val userId = authResult.user?.uid
+                val userData = hashMapOf(
+                    "email" to email,
+                    "role" to "admin",
+                    "username" to username
+                )
+
+                userId?.let {
+                    db.collection("users").document(email).set(userData)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Successfully Signed Up! Login With Your Created Account", Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@RegisterPage, LoginPage::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Failed to Save User Data: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }.addOnFailureListener {
+                Toast.makeText(this, "Sign Up Failed: ${it.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
