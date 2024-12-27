@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="seat_available_color">#00FF00</color> <!-- Green for available seats -->
+    <color name="seat_reserved_color">#FF0000</color> <!-- Red for reserved seats -->
+    <color name="seat_selected_color">#0096FF</color> <!-- Blue for selected seats -->
+    <color name="primaryBackground">#0A111F</color>
+    <color name="secondaryBackground">#FFFFFF</color>
+    <color name="primaryText">#0096FF</color>
+    <color name="secondaryText">#FF000000</color>
+    <color name="primaryButton">#FFBF00</color>
+    <color name="secondaryButton">#FFFFFF</color>
 </resources>
