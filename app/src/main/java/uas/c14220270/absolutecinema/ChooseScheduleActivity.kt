@@ -12,6 +12,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleDateAdapter
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleSeatAdapter
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleTimeAdapter
@@ -28,6 +30,7 @@ class ChooseScheduleActivity : AppCompatActivity() {
     private lateinit var _tvTotalPrice: TextView
     private var price: Double = 0.0
     private var number: Int = 0
+    private lateinit var filmName : String
 
     private var selectedSeat: List<ChooseScheduleSeatModel> = emptyList()
     private var selectedDate: String? = null
@@ -48,38 +51,53 @@ class ChooseScheduleActivity : AppCompatActivity() {
         _timeRecView = findViewById(R.id.timeRecView)
         _tvTotalPrice = findViewById(R.id.tvTotalPrice)
 
+        filmName = intent.getStringExtra("MOVIE_TITLE") ?: "Default Movie Title"
+
         initSeatList()
     }
 
     private fun initSeatList() {
+        val db = Firebase.firestore
         val gridLayoutManager = GridLayoutManager(this, 5)
         _seatRecView.layoutManager = gridLayoutManager
 
+        val movieId = "1"
         val seatList = mutableListOf<ChooseScheduleSeatModel>()
-        val numberSeats = 42
 
-        /*
-        TODO: DISESUAIKAN DENGAN DATABASE (SCAN STATUS SETIAP SEAT)
-         */
-        for (i in 0 until numberSeats) {
-            val seatNumber = i + 1
-            seatList.add(ChooseScheduleSeatModel(ChooseScheduleSeatModel.SeatStatus.AVAILABLE, seatNumber))
-        }
+        db.collection("movies").document(movieId).collection("seats")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val seatNumber = document.id.toInt()
+                    val status = document.getString("status") ?: "available"
 
-        _seatRecView.adapter = ChooseScheduleSeatAdapter(seatList, this, object : ChooseScheduleSeatAdapter.SelectedSeat {
-            override fun Return(selectedName: String, num: Int) {
-                val df = DecimalFormat("#,###")
-                val formattedPrice = df.format(num * 50000)
-                price = (num * 50000).toDouble()
+                    val seatStatus = when (status) {
+                        "available" -> ChooseScheduleSeatModel.SeatStatus.AVAILABLE
+                        "booked" -> ChooseScheduleSeatModel.SeatStatus.BOOKED
+                        else -> ChooseScheduleSeatModel.SeatStatus.AVAILABLE
+                    }
 
-                number = num
+                    seatList.add(ChooseScheduleSeatModel(seatStatus, seatNumber))
+                }
 
-                selectedSeat = seatList.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
-                Log.d("", selectedSeat.toString())
+                _seatRecView.adapter = ChooseScheduleSeatAdapter(seatList, this, object : ChooseScheduleSeatAdapter.SelectedSeat {
+                    override fun Return(selectedName: String, num: Int) {
+                        val df = DecimalFormat("#,###")
+                        val formattedPrice = df.format(num * 50000)
+                        price = (num * 50000).toDouble()
 
-                _tvTotalPrice.text = "IDR $formattedPrice"
+                        number = num
+
+                        selectedSeat = seatList.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
+                        Log.d("SelectedSeats", selectedSeat.toString())
+
+                        _tvTotalPrice.text = "IDR $formattedPrice"
+                    }
+                })
             }
-        })
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error fetching seats: ", exception)
+            }
 
         _timeRecView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         _timeRecView.adapter = ChooseScheduleTimeAdapter(generateTimeSlots()) { selectedTimeSlot ->
@@ -93,6 +111,7 @@ class ChooseScheduleActivity : AppCompatActivity() {
             Log.d("SelectedDate", "Selected Date: $selectedDate")
         }
     }
+
 
 
     private fun generateTimeSlots(): List<String> {
