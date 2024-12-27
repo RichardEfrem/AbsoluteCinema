@@ -7,5 +7,7 @@ data class Movies(
     val producer: String,
     val actor: String,
     val posterUrl: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val duration: String,
+    val genre: String
 )
