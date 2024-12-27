@@ -5,6 +5,14 @@
         android:icon="@drawable/baseline_home_24"
         android:title="Home" />
     <item
+        android:id="@+id/ticket"
+        android:icon="@drawable/ticket"
+        android:title="Ticket" />
+    <item
+        android:id="@+id/movie"
+        android:icon="@drawable/video_16"
+        android:title="Movie" />
+    <item
         android:id="@+id/profile"
         android:icon="@drawable/baseline_person_24"
         android:title="Profile" />

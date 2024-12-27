@@ -31,9 +31,6 @@
             android:name=".TicketPage"
             android:exported="false" />
         <activity
-            android:name=".AdminOption"
-            android:exported="false" />
-        <activity
             android:name=".ProfilePage"
             android:exported="false" />
         <activity
@@ -43,9 +40,6 @@
             android:name=".LoginPage"
             android:exported="false" />
 
-        <activity
-            android:name=".ChooseSeatActivity"
-            android:exported="false" />
 
     </application>
 
