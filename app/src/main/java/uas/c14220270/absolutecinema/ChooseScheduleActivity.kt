@@ -2,7 +2,9 @@ package uas.c14220270.absolutecinema
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleDateAdapter
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleSeatAdapter
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleTimeAdapter
@@ -24,6 +25,13 @@ class ChooseScheduleActivity : AppCompatActivity() {
     private lateinit var _seatRecView: RecyclerView
     private lateinit var _dateRecView : RecyclerView
     private lateinit var _timeRecView : RecyclerView
+    private lateinit var _tvTotalPrice : TextView
+    private var price : Double = 0.0
+    private var number : Int = 0
+
+    private var selectedSeat: List<ChooseScheduleSeatModel> = emptyList()
+    private var selectedDate: String? = null
+    private var selectedTime: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +46,7 @@ class ChooseScheduleActivity : AppCompatActivity() {
         _seatRecView = findViewById<RecyclerView>(R.id.seatRecView)
         _dateRecView = findViewById<RecyclerView>(R.id.dateRecView)
         _timeRecView = findViewById<RecyclerView>(R.id.timeRecView)
+        _tvTotalPrice = findViewById<TextView>(R.id.tvTotalPrice)
         initSeatList()
         generateTimeSlots()
         generateDates()
@@ -67,9 +76,16 @@ class ChooseScheduleActivity : AppCompatActivity() {
 
         val ChooseScheduleSeatAdapter = ChooseScheduleSeatAdapter(seatList, this, object : ChooseScheduleSeatAdapter.SelectedSeat {
             override fun Return(selectedName: String, num: Int) {
-
                 val df = DecimalFormat("#,###")
+                val formattedPrice = df.format(num * 50000)
+                price = (num * 50000).toDouble()
 
+                number = num
+
+                selectedSeat = seatList.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
+                Log.d("", selectedSeat.toString())
+
+                _tvTotalPrice.text = "IDR $formattedPrice"
             }
 
         })
@@ -87,7 +103,7 @@ class ChooseScheduleActivity : AppCompatActivity() {
     private fun generateTimeSlots() : List<String> {
         val timeSlots = mutableListOf<String>()
         val formatter = DateTimeFormatter.ofPattern("hh:mm a")
-        for (i in 0..23 step 2) {
+        for (i in 0..8 step 2) {
             val time = formatter.format(LocalTime.of(i, 0))
             timeSlots.add(time)
         }
