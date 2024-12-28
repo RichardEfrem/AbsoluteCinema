@@ -1,8 +1,12 @@
 package uas.c14220270.absolutecinema
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,6 +17,11 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.WriterException
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
+import com.google.zxing.qrcode.QRCodeWriter
 import org.w3c.dom.Text
 
 
@@ -42,6 +51,8 @@ class TicketPage : AppCompatActivity() {
         val _tvLocation = findViewById<TextView>(R.id.tvLocation)
         val _ivMovie = findViewById<ImageView>(R.id.ivMovie)
         val _tvTime = findViewById<TextView>(R.id.tvTime)
+
+
 
         db.collection("tickets").document(ticketId)
             .get()
@@ -86,10 +97,62 @@ class TicketPage : AppCompatActivity() {
                 }
             }
 
+        displayQRCode(ticketId)
+
         val _btnBack = findViewById<FloatingActionButton>(R.id.btnBack)
         _btnBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun generateQRCode(ticketId: String): Bitmap? {
+        val qrCodeWriter = QRCodeWriter()
+        return try {
+            val bitMatrix = qrCodeWriter.encode(ticketId, BarcodeFormat.QR_CODE, 200, 200)
+            val width = bitMatrix.width
+            val height = bitMatrix.height
+            val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            for (x in 0 until width) {
+                for (y in 0 until height) {
+                    bmp.setPixel(x, y, if (bitMatrix[x, y]) Color.BLACK else Color.WHITE)
+                }
+            }
+            bmp
+        } catch (e: WriterException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun displayQRCode(ticketId: String) {
+        val qrCodeBitmap = generateQRCode(ticketId)
+        val qrCodeImageView = findViewById<ImageView>(R.id.ivQr)
+        qrCodeImageView.setImageBitmap(qrCodeBitmap)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result: IntentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents != null) {
+                val scannedTicketId = result.contents
+                updateTicketStatus(scannedTicketId)
+            } else {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun updateTicketStatus(ticketId: String) {
+        db.collection("tickets").document(ticketId)
+            .update("status", "printed")
+            .addOnSuccessListener {
+                Toast.makeText(this, "Ticket status updated", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.w("TicketPage", "Error updating ticket status", e)
+            }
     }
 
 //    private fun fetchMovieData(movieTitle: String, callback: (Movies?) -> Unit) {
