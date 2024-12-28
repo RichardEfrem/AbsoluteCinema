@@ -2,6 +2,7 @@ package uas.c14220270.absolutecinema
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
@@ -50,7 +51,7 @@ class ProfilePage : AppCompatActivity() {
         }
 
         val _btnLogout = findViewById<Button>(R.id.logout_button)
-        _btnLogout.setOnClickListener{
+        _btnLogout.setOnClickListener {
             SharedPreferencesManager.clearAll()
             FirebaseAuth.getInstance().signOut()
             val intent = Intent(this, MainActivity::class.java)
@@ -60,15 +61,100 @@ class ProfilePage : AppCompatActivity() {
 
         val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
         val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
+        val _ticketBtn = findViewById<ImageButton>(R.id.ticketButton)
 
-        _homeBtn.setOnClickListener{
+        _homeBtn.setOnClickListener {
             val intent = Intent(this@ProfilePage, HomeActivity::class.java)
             startActivity(intent)
         }
 
-        _profileBtn.setOnClickListener{
+        _profileBtn.setOnClickListener {
             val intent = Intent(this@ProfilePage, ProfilePage::class.java)
             startActivity(intent)
         }
+
+        _ticketBtn.setOnClickListener{
+            val intent = Intent(this@ProfilePage, myTicket::class.java)
+            startActivity(intent)
+        }
+
+        val _generateButton = findViewById<Button>(R.id.generateShows)
+        _generateButton.setOnClickListener {
+            updateShowsDateAndResetSeats()
+        }
+    }
+
+    private fun updateShowsDateAndResetSeats() {
+        val db = FirebaseFirestore.getInstance()
+        val currentDate = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+            .format(java.util.Date())
+
+        // Update the shows collection with the new date and reset the seats
+        db.collection("shows")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val documentId = document.id
+                    val emptySeats = generateSeats(45)
+                    db.collection("shows").document(documentId)
+                        .update(
+                            mapOf(
+                                "date" to currentDate,
+                                "seats" to emptySeats
+                            )
+                        )
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(
+                                this,
+                                "Error updating show: $documentId",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                }
+
+                db.collection("tickets")
+                    .get()
+                    .addOnSuccessListener { ticketDocuments ->
+                        for (ticket in ticketDocuments) {
+                            val ticketId = ticket.id
+                            db.collection("tickets").document(ticketId).delete()
+                                .addOnSuccessListener {
+                                    Log.d("Firestore", "Ticket $ticketId deleted successfully")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.e("Firestore", "Error deleting ticket: $ticketId", exception)
+                                }
+                        }
+                        Toast.makeText(
+                            this,
+                            "Successfully updated date, reset seats for shows, and deleted all tickets.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("Firestore", "Error fetching tickets: ", exception)
+                        Toast.makeText(
+                            this,
+                            "Error deleting tickets from the collection",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore", "Error fetching shows: ", exception)
+            }
+    }
+
+
+    // Helper function to generate seats
+    private fun generateSeats(count: Int): Map<String, String> {
+        val seats = mutableMapOf<String, String>()
+        for (i in 1..count) {
+            seats[i.toString()] = "Available"
+        }
+        return seats
     }
 }

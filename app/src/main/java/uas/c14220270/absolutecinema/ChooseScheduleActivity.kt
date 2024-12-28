@@ -3,6 +3,8 @@ package uas.c14220270.absolutecinema
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,12 +13,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleSeatAdapter
 import uas.c14220270.absolutecinema.Adapters.ChooseScheduleTimeAdapter
 import uas.c14220270.absolutecinema.Models.ChooseScheduleSeatModel
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.Date
 
 class ChooseScheduleActivity : AppCompatActivity() {
     private lateinit var _seatRecView: RecyclerView
@@ -26,6 +32,7 @@ class ChooseScheduleActivity : AppCompatActivity() {
     private var number: Int = 0
     private lateinit var filmName: String
     private lateinit var _buyTicketButton: TextView
+    private lateinit var auth: FirebaseAuth
 
     private var selectedSeat: List<ChooseScheduleSeatModel> = emptyList()
     private var selectedTime: String? = null
@@ -40,6 +47,16 @@ class ChooseScheduleActivity : AppCompatActivity() {
             insets
         }
 
+        val _backBtn = findViewById<ImageButton>(R.id.backButton)
+        _backBtn.setOnClickListener{
+            finish()
+        }
+
+
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        val email = currentUser?.email.toString()
+
         _seatRecView = findViewById(R.id.seatRecView)
         _timeRecView = findViewById(R.id.timeRecView)
         _tvTotalPrice = findViewById(R.id.tvTotalPrice)
@@ -53,34 +70,38 @@ class ChooseScheduleActivity : AppCompatActivity() {
         initTimeList()
 
         _buyTicketButton.setOnClickListener {
-            buyTicket()
+            buyTicket(email)
         }
     }
 
-    private fun buyTicket() {
-        val userId = "user123" // TODO : DAPATKAN USER ID YANG RIL
+    private fun buyTicket(email :String) {
+        val userId = email // TODO :
         val seatsSelected = selectedSeat.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
         val seatNumbers = seatsSelected.joinToString(",") { it.seatNumber.toString() }
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd") // Define your desired format
+        val currentDate = dateFormat.format(Date()).toString()
 
         val ticketData = hashMapOf(
             "movie_title" to filmName,
-            "price" to price,
+            "price" to price.toString(),
             "seats" to seatNumbers,
             "time" to selectedTime,
-            "user_id" to userId
+            "user_id" to userId,
+            "status" to "booked",
+            "date" to currentDate
         )
 
         val db = Firebase.firestore
         db.collection("tickets")
             .add(ticketData)
             .addOnSuccessListener { documentReference ->
+                val ticketId = documentReference.id
                 Log.d("Firestore", "Ticket added with ID: ${documentReference.id}")
 
                 updateSeatsToBooked(seatsSelected)
 
-                val intent = Intent(this, ChooseScheduleActivity::class.java)
-                intent.putExtra("MOVIE_TITLE", filmName)
-                intent.putExtra("SELECTED_TIME", selectedTime)
+                val intent = Intent(this, TicketPage::class.java)
+                intent.putExtra("TICKET_ID", ticketId)
                 startActivity(intent)
                 finish()
             }
@@ -181,16 +202,20 @@ class ChooseScheduleActivity : AppCompatActivity() {
                             }
                             seatList.add(ChooseScheduleSeatModel(seatStatus, seatNumber.toInt()))
                         }
-                        Log.d("SEAT LIST LOG", seatList.toString())
+
+                        // Sort the seats by their number
+                        val sortedSeatList = seatList.sortedBy { it.seatNumber }
+
+                        Log.d("SORTED SEAT LIST", sortedSeatList.toString())
 
                         _seatRecView.layoutManager = GridLayoutManager(this, 5)
-                        _seatRecView.adapter = ChooseScheduleSeatAdapter(seatList, this, object : ChooseScheduleSeatAdapter.SelectedSeat {
+                        _seatRecView.adapter = ChooseScheduleSeatAdapter(sortedSeatList, this, object : ChooseScheduleSeatAdapter.SelectedSeat {
                             override fun Return(selectedName: String, num: Int) {
                                 val df = DecimalFormat("#,###")
                                 price = num * 50000.0
                                 _tvTotalPrice.text = "IDR ${df.format(price)}"
                                 number = num
-                                selectedSeat = seatList.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
+                                selectedSeat = sortedSeatList.filter { it.status == ChooseScheduleSeatModel.SeatStatus.SELECTED }
                             }
                         })
                     }
@@ -202,5 +227,6 @@ class ChooseScheduleActivity : AppCompatActivity() {
                 Log.e("Firestore", "Error fetching seats: ", exception)
             }
     }
+
 }
 
