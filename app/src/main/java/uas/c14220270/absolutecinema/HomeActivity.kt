@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,9 +39,13 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnMovieClickListener {
 
         // Set up RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.playingNowRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = ScaleCenterItemLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         homeAdapter = HomeAdapter(movieList, this)
         recyclerView.adapter = homeAdapter
+
+        val snapHelperPlayingNow = PagerSnapHelper()
+        snapHelperPlayingNow.attachToRecyclerView(recyclerView)
 
         fetchAllMovies()
 

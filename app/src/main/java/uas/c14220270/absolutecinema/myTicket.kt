@@ -41,6 +41,7 @@ class myTicket : AppCompatActivity() {
         val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
         val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
         val _ticketBtn = findViewById<ImageButton>(R.id.ticketButton)
+        val _movieBtn = findViewById<ImageButton>(R.id.movieButton)
 
         _homeBtn.setOnClickListener {
             val intent = Intent(this@myTicket, HomeActivity::class.java)
@@ -54,6 +55,11 @@ class myTicket : AppCompatActivity() {
 
         _ticketBtn.setOnClickListener{
             val intent = Intent(this@myTicket, myTicket::class.java)
+            startActivity(intent)
+        }
+
+        _movieBtn.setOnClickListener{
+            val intent = Intent(this@myTicket, MoviePage::class.java)
             startActivity(intent)
         }
     }
