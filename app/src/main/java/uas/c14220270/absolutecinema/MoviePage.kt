@@ -1,7 +1,10 @@
 package uas.c14220270.absolutecinema
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
-class MoviePage : AppCompatActivity() {
+class MoviePage : AppCompatActivity(), MovieAdapter.OnMovieClickListener {
     private val db = Firebase.firestore
-    private val movieList = mutableListOf<Movie>()
+    private val movieList = mutableListOf<Movies>()
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var recyclerView: RecyclerView
 
@@ -29,14 +32,37 @@ class MoviePage : AppCompatActivity() {
             insets
         }
         recyclerView = findViewById(R.id.rvMovie)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        movieAdapter = MovieAdapter(movieList)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        movieAdapter = MovieAdapter(movieList, this)
         recyclerView.adapter = movieAdapter
 
         fetchMovieData()
 
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-        recyclerView.adapter = movieAdapter
+        val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
+        val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
+        val _ticketBtn = findViewById<ImageButton>(R.id.ticketButton)
+        val _movieBtn = findViewById<ImageButton>(R.id.movieButton)
+
+        _homeBtn.setOnClickListener{
+            val intent = Intent(this@MoviePage, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
+        _profileBtn.setOnClickListener{
+            val intent = Intent(this@MoviePage, ProfilePage::class.java)
+            startActivity(intent)
+        }
+
+        _ticketBtn.setOnClickListener{
+            val intent = Intent(this@MoviePage, myTicket::class.java)
+            startActivity(intent)
+        }
+
+        _movieBtn.setOnClickListener{
+            val intent = Intent(this@MoviePage, MoviePage::class.java)
+            startActivity(intent)
+        }
+
 
     }
 
@@ -46,12 +72,8 @@ class MoviePage : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 movieList.clear()
                 for (document in result) {
-                    val title = document.getString("title") ?: ""
-                    val duration = document.getString("duration") ?: ""
-                    val genre = document.getString("genre") ?: ""
-                    val imageUrl = document.getString("imageUrl") ?: ""
+                    val movie = document.toObject(Movies::class.java)
 
-                    val movie = Movie(title, duration, genre, imageUrl)
                     movieList.add(movie)
                 }
                 movieAdapter.notifyDataSetChanged()
@@ -59,5 +81,18 @@ class MoviePage : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.e("MoviePage", "Error getting movie data", exception)
             }
+    }
+
+    override fun onMovieClick(movie: Movies) {
+        val intent = Intent(this, MovieDetail::class.java)
+        intent.putExtra("MOVIE_TITLE", movie.title)
+        intent.putExtra("MOVIE_DURATION", movie.duration)
+        intent.putExtra("MOVIE_GENRE", movie.genre)
+        intent.putExtra("MOVIE_IMAGE", movie.imageUrl)
+        intent.putExtra("MOVIE_PRODUCER", movie.producer)
+        intent.putExtra("MOVIE_DIRECTOR", movie.director)
+        intent.putExtra("MOVIE_ACTOR", movie.actor)
+        intent.putExtra("MOVIE_SYNOPSIS", movie.synopsis)
+        startActivity(intent)
     }
 }

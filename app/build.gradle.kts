@@ -45,8 +45,13 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+//    implementation(libs.androidx.camerax.core)
+//    implementation(libs.androidx.camerax.lifecycle)
+//    implementation(libs.androidx.camerax.view)
+//    implementation(libs.mlkit.barcode.scanning)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     }
 

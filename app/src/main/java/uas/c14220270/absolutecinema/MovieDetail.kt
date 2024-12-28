@@ -32,11 +32,19 @@ class MovieDetail : AppCompatActivity() {
         val _tvProducer = findViewById<TextView>(R.id.tvProducer)
         val _tvActor = findViewById<TextView>(R.id.tvActor)
 
-        val _chooseSeatsBtn = findViewById<Button>(R.id.bottom_button)
+//        val _chooseSeatsBtn = findViewById<Button>(R.id.bottom_button)
         val _btnBack = findViewById<FloatingActionButton>(R.id.btnBack)
+        val _bottomButton = findViewById<Button>(R.id.bottom_button)
 
         _btnBack.setOnClickListener{
-            val intent = Intent(this@MovieDetail, HomeActivity::class.java)
+//            val intent = Intent(this@MovieDetail, HomeActivity::class.java)
+//            startActivity(intent)
+            finish()
+        }
+
+        _bottomButton.setOnClickListener {
+            val intent = Intent(this@MovieDetail, ChooseScheduleActivity::class.java)
+            intent.putExtra("MOVIE_TITLE", _tvTitle.text)
             startActivity(intent)
         }
 
@@ -67,7 +75,5 @@ class MovieDetail : AppCompatActivity() {
         _tvDirector.setText(director)
         _tvProducer.setText(producer)
         _tvActor.setText(actor)
-
-
     }
 }
