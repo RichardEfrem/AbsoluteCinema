@@ -15,10 +15,13 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
 
 class ProfilePage : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         SharedPreferencesManager.init(this)
         auth = FirebaseAuth.getInstance()
@@ -40,14 +43,18 @@ class ProfilePage : AppCompatActivity() {
         val _tvProfileName = findViewById<TextView>(R.id.profile_name)
         val _tvEmail = findViewById<TextView>(R.id.email_address)
 
-        _tvProfileName.setText(Username.toString())
-        _tvEmail.setText(email.toString())
+        _tvProfileName.text = Username.toString()
+        _tvEmail.text = email.toString()
 
         val _btnMyTicket = findViewById<LinearLayout>(R.id.my_ticket)
 
         val _btnQrScanner = findViewById<LinearLayout>(R.id.qr_scanner)
         if (role != "admin") {
             _btnQrScanner.visibility = Button.GONE
+        } else {
+            _btnQrScanner.setOnClickListener {
+                IntentIntegrator(this).initiateScan()
+            }
         }
 
         val _btnLogout = findViewById<Button>(R.id.logout_button)
@@ -73,7 +80,7 @@ class ProfilePage : AppCompatActivity() {
             startActivity(intent)
         }
 
-        _ticketBtn.setOnClickListener{
+        _ticketBtn.setOnClickListener {
             val intent = Intent(this@ProfilePage, myTicket::class.java)
             startActivity(intent)
         }
@@ -84,12 +91,36 @@ class ProfilePage : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result: IntentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents != null) {
+                val ticketId = result.contents
+                updateTicketStatus(ticketId)
+            } else {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun updateTicketStatus(ticketId: String) {
+        firestore.collection("tickets").document(ticketId)
+            .update("status", "printed")
+            .addOnSuccessListener {
+                Toast.makeText(this, "Ticket status updated", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                Log.w("ProfilePage", "Error updating ticket status", e)
+            }
+    }
+
     private fun updateShowsDateAndResetSeats() {
         val db = FirebaseFirestore.getInstance()
         val currentDate = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
             .format(java.util.Date())
 
-        // Update the shows collection with the new date and reset the seats
         db.collection("shows")
             .get()
             .addOnSuccessListener { documents ->
@@ -148,8 +179,6 @@ class ProfilePage : AppCompatActivity() {
             }
     }
 
-
-    // Helper function to generate seats
     private fun generateSeats(count: Int): Map<String, String> {
         val seats = mutableMapOf<String, String>()
         for (i in 1..count) {
