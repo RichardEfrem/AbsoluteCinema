@@ -46,6 +46,8 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnMovieClickListener {
 
         val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
         val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
+        val _ticketBtn = findViewById<ImageButton>(R.id.ticketButton)
+        val _movieBtn = findViewById<ImageButton>(R.id.movieButton)
 
         _homeBtn.setOnClickListener{
             val intent = Intent(this@HomeActivity, HomeActivity::class.java)
@@ -54,6 +56,16 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnMovieClickListener {
 
         _profileBtn.setOnClickListener{
             val intent = Intent(this@HomeActivity, ProfilePage::class.java)
+            startActivity(intent)
+        }
+
+        _ticketBtn.setOnClickListener{
+            val intent = Intent(this@HomeActivity, myTicket::class.java)
+            startActivity(intent)
+        }
+
+        _movieBtn.setOnClickListener{
+            val intent = Intent(this@HomeActivity, MoviePage::class.java)
             startActivity(intent)
         }
     }

@@ -61,6 +61,7 @@ class ProfilePage : AppCompatActivity() {
 
         val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
         val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
+        val _ticketBtn = findViewById<ImageButton>(R.id.ticketButton)
 
         _homeBtn.setOnClickListener {
             val intent = Intent(this@ProfilePage, HomeActivity::class.java)
@@ -69,6 +70,11 @@ class ProfilePage : AppCompatActivity() {
 
         _profileBtn.setOnClickListener {
             val intent = Intent(this@ProfilePage, ProfilePage::class.java)
+            startActivity(intent)
+        }
+
+        _ticketBtn.setOnClickListener{
+            val intent = Intent(this@ProfilePage, myTicket::class.java)
             startActivity(intent)
         }
 
@@ -82,6 +88,8 @@ class ProfilePage : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val currentDate = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
             .format(java.util.Date())
+
+        // Update the shows collection with the new date and reset the seats
         db.collection("shows")
             .get()
             .addOnSuccessListener { documents ->
@@ -96,11 +104,7 @@ class ProfilePage : AppCompatActivity() {
                             )
                         )
                         .addOnSuccessListener {
-                            Toast.makeText(
-                                this,
-                                "Successfully updated date and reset seats for show: $documentId",
-                                Toast.LENGTH_SHORT
-                            ).show()
+
                         }
                         .addOnFailureListener { exception ->
                             Toast.makeText(
@@ -110,11 +114,40 @@ class ProfilePage : AppCompatActivity() {
                             ).show()
                         }
                 }
+
+                db.collection("tickets")
+                    .get()
+                    .addOnSuccessListener { ticketDocuments ->
+                        for (ticket in ticketDocuments) {
+                            val ticketId = ticket.id
+                            db.collection("tickets").document(ticketId).delete()
+                                .addOnSuccessListener {
+                                    Log.d("Firestore", "Ticket $ticketId deleted successfully")
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.e("Firestore", "Error deleting ticket: $ticketId", exception)
+                                }
+                        }
+                        Toast.makeText(
+                            this,
+                            "Successfully updated date, reset seats for shows, and deleted all tickets.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.e("Firestore", "Error fetching tickets: ", exception)
+                        Toast.makeText(
+                            this,
+                            "Error deleting tickets from the collection",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
             }
             .addOnFailureListener { exception ->
                 Log.e("Firestore", "Error fetching shows: ", exception)
             }
     }
+
 
     // Helper function to generate seats
     private fun generateSeats(count: Int): Map<String, String> {
