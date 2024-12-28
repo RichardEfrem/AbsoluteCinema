@@ -38,8 +38,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Movie Title"
+                android:layout_gravity="center"
                 android:textStyle="bold"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@android:color/white"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="4dp"/>
@@ -49,7 +50,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Duration"
-                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:textSize="14sp"
                 android:layout_marginBottom="4dp"
                 android:textColor="@android:color/white" />
 
@@ -57,8 +59,9 @@
                 android:id="@+id/movieGenre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Duration"
-                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:text="Genre"
+                android:textSize="14sp"
                 android:layout_marginBottom="4dp"
                 android:textColor="@android:color/white" />
         </LinearLayout>
