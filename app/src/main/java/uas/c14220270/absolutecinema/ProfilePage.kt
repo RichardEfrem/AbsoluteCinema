@@ -44,11 +44,12 @@ class ProfilePage : AppCompatActivity() {
         _tvEmail.setText(email.toString())
 
         val _btnMyTicket = findViewById<LinearLayout>(R.id.my_ticket)
+        _btnMyTicket.setOnClickListener{
+            val intent = Intent(this@ProfilePage, myTicket::class.java)
+            startActivity(intent)
+        }
 
         val _btnQrScanner = findViewById<LinearLayout>(R.id.qr_scanner)
-        if (role != "admin") {
-            _btnQrScanner.visibility = Button.GONE
-        }
 
         val _btnLogout = findViewById<Button>(R.id.logout_button)
         _btnLogout.setOnClickListener {
@@ -87,6 +88,10 @@ class ProfilePage : AppCompatActivity() {
         val _generateButton = findViewById<Button>(R.id.generateShows)
         _generateButton.setOnClickListener {
             updateShowsDateAndResetSeats()
+        }
+        if (role != "admin") {
+            _btnQrScanner.visibility = Button.GONE
+            _generateButton.visibility = Button.GONE
         }
     }
 
