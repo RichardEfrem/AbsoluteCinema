@@ -47,6 +47,10 @@ class ProfilePage : AppCompatActivity() {
         _tvEmail.text = email.toString()
 
         val _btnMyTicket = findViewById<LinearLayout>(R.id.my_ticket)
+        _btnMyTicket.setOnClickListener{
+            val intent = Intent(this@ProfilePage, myTicket::class.java)
+            startActivity(intent)
+        }
 
         val _btnQrScanner = findViewById<LinearLayout>(R.id.qr_scanner)
         if (role != "admin") {
@@ -69,6 +73,7 @@ class ProfilePage : AppCompatActivity() {
         val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
         val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
         val _ticketBtn = findViewById<ImageButton>(R.id.ticketButton)
+        val _movieBtn = findViewById<ImageButton>(R.id.movieButton)
 
         _homeBtn.setOnClickListener {
             val intent = Intent(this@ProfilePage, HomeActivity::class.java)
@@ -85,9 +90,18 @@ class ProfilePage : AppCompatActivity() {
             startActivity(intent)
         }
 
+        _movieBtn.setOnClickListener{
+            val intent = Intent(this@ProfilePage, MoviePage::class.java)
+            startActivity(intent)
+        }
+
         val _generateButton = findViewById<Button>(R.id.generateShows)
         _generateButton.setOnClickListener {
             updateShowsDateAndResetSeats()
+        }
+        if (role != "admin") {
+            _btnQrScanner.visibility = Button.GONE
+            _generateButton.visibility = Button.GONE
         }
     }
 

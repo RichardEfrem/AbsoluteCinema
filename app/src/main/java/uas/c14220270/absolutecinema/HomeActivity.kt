@@ -5,11 +5,13 @@ import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,12 +22,38 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnMovieClickListener {
     private lateinit var db: FirebaseFirestore
     private lateinit var homeAdapter: HomeAdapter
     private val movieList = mutableListOf<Movies>()
+//    private lateinit var username : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
         db = FirebaseFirestore.getInstance()
+        var username: String = "Guest"
+
+        // Check if the current user exists
+        currentUser?.email?.let { email ->
+            db.collection("users").document(email).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        username = document.getString("username") ?: "Guest"
+                        Log.d("Firestore", "Username: $username")
+                        // Update the TextView with the fetched username
+                        findViewById<TextView>(R.id.helloText).text = "Hello, $username"
+                    } else {
+                        Log.d("Firestore", "No such user document")
+                        findViewById<TextView>(R.id.helloText).text = "Hello, Guest"
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("Firestore", "Error fetching user details", exception)
+                    findViewById<TextView>(R.id.helloText).text = "Hello, Guest"
+                }
+        } ?: run {
+            Log.e("Auth", "No current user found")
+            findViewById<TextView>(R.id.helloText).text = "Hello, Guest"
+        }
+
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,11 +66,18 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnMovieClickListener {
 
         // Set up RecyclerView
         val recyclerView = findViewById<RecyclerView>(R.id.playingNowRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+//        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = ScaleCenterItemLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         homeAdapter = HomeAdapter(movieList, this)
         recyclerView.adapter = homeAdapter
 
+        val snapHelperPlayingNow = PagerSnapHelper()
+        snapHelperPlayingNow.attachToRecyclerView(recyclerView)
+
         fetchAllMovies()
+
+//        val _helloText = findViewById<TextView>(R.id.helloText)
+//        _helloText.setText("Hello, $username")
 
         val _homeBtn = findViewById<ImageButton>(R.id.homeButton)
         val _profileBtn = findViewById<ImageButton>(R.id.profileButton)
