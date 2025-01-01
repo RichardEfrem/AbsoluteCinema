@@ -65,11 +65,9 @@ class myTicket : AppCompatActivity() {
     }
 
     private fun fetchAllTickets() {
-        // Initialize Firebase Auth and Firestore if not already done
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Get the current user's email
         val currentUserEmail = auth.currentUser?.email
 
         if (currentUserEmail != null) {

@@ -120,15 +120,31 @@ class ProfilePage : AppCompatActivity() {
     }
 
     private fun updateTicketStatus(ticketId: String) {
-        firestore.collection("tickets").document(ticketId)
-            .update("status", "printed")
-            .addOnSuccessListener {
-                Toast.makeText(this, "Ticket status updated", Toast.LENGTH_SHORT).show()
+        val ticketRef = firestore.collection("tickets").document(ticketId)
+        ticketRef.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val currentStatus = document.getString("status")
+                    if (currentStatus != "printed") {
+                        ticketRef.update("status", "printed")
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Ticket status updated to printed", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("ProfilePage", "Error updating ticket status", e)
+                            }
+                    } else {
+                        Toast.makeText(this, "Ticket is already printed", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.w("ProfilePage", "Ticket not found")
+                }
             }
             .addOnFailureListener { e ->
-                Log.w("ProfilePage", "Error updating ticket status", e)
+                Log.w("ProfilePage", "Error fetching ticket status", e)
             }
     }
+
 
     private fun updateShowsDateAndResetSeats() {
         val db = FirebaseFirestore.getInstance()

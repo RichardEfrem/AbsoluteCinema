@@ -81,7 +81,7 @@ class ChooseScheduleActivity : AppCompatActivity() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd") // Define your desired format
         val currentDate = dateFormat.format(Date()).toString()
 
-        val ticketData = hashMapOf(
+        var ticketData = hashMapOf(
             "movie_title" to filmName,
             "price" to price.toString(),
             "seats" to seatNumbers,
@@ -92,21 +92,47 @@ class ChooseScheduleActivity : AppCompatActivity() {
         )
 
         val db = Firebase.firestore
+
         db.collection("tickets")
-            .add(ticketData)
-            .addOnSuccessListener { documentReference ->
-                val ticketId = documentReference.id
-                Log.d("Firestore", "Ticket added with ID: ${documentReference.id}")
+            .whereEqualTo("user_id", userId)
+            .whereEqualTo("movie_title", filmName)
+            .whereEqualTo("time", selectedTime)
+            .get().addOnSuccessListener { document ->
+                if (document.isEmpty){
+                    db.collection("tickets").add(ticketData)
+                        .addOnSuccessListener { documentReference ->
+                            val ticketId = documentReference.id
+                            Log.d("Firestore", "Ticket added with ID: ${documentReference.id}")
 
-                updateSeatsToBooked(seatsSelected)
+                            updateSeatsToBooked(seatsSelected)
 
-                val intent = Intent(this, TicketPage::class.java)
-                intent.putExtra("TICKET_ID", ticketId)
-                startActivity(intent)
-                finish()
+                            val intent = Intent(this, TicketPage::class.java)
+                            intent.putExtra("TICKET_ID", ticketId)
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Firestore", "Error adding ticket: ", e)
+                        }
+                }else{
+                    val oldId = document.documents.first().id
+                    val oldSeats = document.documents.first().get("seats").toString()
+                    val newSeats = "$seatNumbers , $oldSeats"
+                    val ticketRef = db.collection("tickets").document(oldId)
+                    ticketRef.get().addOnSuccessListener { tickets ->
+                        if (tickets.exists()){
+                            ticketRef.update("seats", newSeats)
+                            updateSeatsToBooked(seatsSelected)
+                            val ticketId = tickets.id
+                            val intent = Intent(this, TicketPage::class.java)
+                            intent.putExtra("TICKET_ID", ticketId)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                }
             }
-            .addOnFailureListener { e ->
-                Log.e("Firestore", "Error adding ticket: ", e)
+            .addOnFailureListener{
             }
     }
 
