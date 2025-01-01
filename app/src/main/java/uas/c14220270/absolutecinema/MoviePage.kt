@@ -63,6 +63,7 @@ class MoviePage : AppCompatActivity(), MovieAdapter.OnMovieClickListener {
             startActivity(intent)
         }
 
+
     }
 
     private fun fetchMovieData() {
@@ -72,6 +73,7 @@ class MoviePage : AppCompatActivity(), MovieAdapter.OnMovieClickListener {
                 movieList.clear()
                 for (document in result) {
                     val movie = document.toObject(Movies::class.java)
+
                     movieList.add(movie)
                 }
                 movieAdapter.notifyDataSetChanged()

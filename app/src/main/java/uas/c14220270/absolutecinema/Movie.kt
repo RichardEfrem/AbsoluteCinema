@@ -1,10 +1,8 @@
 package uas.c14220270.absolutecinema
 
 data class Movie(
-    var image: String,
-    var title: String,
-    var rate: String,
-    var duration: String,
-    var genre: String
-
-)
+    val title: String,
+    val duration: String,
+    val genre: String,
+    val imageUrl: String,
+    )

@@ -1,6 +1,5 @@
 package uas.c14220270.absolutecinema
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ class MovieAdapter(private val movieList: List<Movies>, private val listener: On
             "drawable",
             holder.itemView.context.packageName
         )
+
         if (resourceId != 0) {
             holder._ivMovie.setImageResource(resourceId)
         } else {
